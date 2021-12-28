@@ -1,5 +1,102 @@
-#### 1.4.28 October 11 2021 ####
+#### 1.4.32 December 20 2021 ####
 **Placeholder for nightlies**
+
+#### 1.4.31 December 20 2021 ####
+Akka.NET v1.4.30 is a minor release that contains some bug fixes.
+
+Akka.NET v1.4.30 contained a breaking change that broke binary compatibility with all Akka.DI plugins.
+Even though those plugins are deprecated that change is not compatible with our SemVer standards 
+and needed to be reverted. We regret the error.
+
+Bug fixes:
+* [Akka: Reverted Props code refactor](https://github.com/akkadotnet/akka.net/pull/5454)
+
+| COMMITS | LOC+ | LOC- | AUTHOR |
+| --- | --- | --- | --- |
+| 1 | 9 | 2 | Gregorius Soedharmo |
+
+#### 1.4.30 December 20 2021 ####
+Akka.NET v1.4.30 is a minor release that contains some enhancements for Akka.Streams and some bug fixes.
+
+New features:
+* [Akka: Added StringBuilder pooling in NewtonsoftJsonSerializer](https://github.com/akkadotnet/akka.net/pull/4929)
+* [Akka.TestKit: Added InverseFishForMessage](https://github.com/akkadotnet/akka.net/pull/5430)
+* [Akka.Streams: Added custom frame sized Flow to Framing](https://github.com/akkadotnet/akka.net/pull/5444)
+* [Akka.Streams: Allow Stream to be consumed as IAsyncEnumerable](https://github.com/akkadotnet/akka.net/pull/4742) 
+
+Bug fixes:
+* [Akka.Cluster: Reverted startup sequence change](https://github.com/akkadotnet/akka.net/pull/5437)
+
+If you want to see the [full set of changes made in Akka.NET v1.4.30, click here](https://github.com/akkadotnet/akka.net/milestone/61).
+
+| COMMITS | LOC+ | LOC- | AUTHOR |
+| --- | --- | --- | --- |
+| 6 | 75 | 101 | Aaron Stannard |
+| 2 | 53 | 5 | Brah McDude |
+| 2 | 493 | 12 | Drew |
+| 1 | 289 | 383 | Andreas Dirnberger |
+| 1 | 220 | 188 | Gregorius Soedharmo |
+| 1 | 173 | 28 | Ismael Hamed |
+
+#### 1.4.29 December 13 2021 ####
+**Maintenance Release for Akka.NET 1.4**
+Akka.NET v1.4.29 is a minor release that contains some enhancements for Akka.Streams and some bug fixes.
+
+New features:
+* [Akka: Added a channel based task scheduler](https://github.com/akkadotnet/akka.net/pull/5403)
+* [Akka.Discovery: Moved Akka.Discovery out of beta](https://github.com/akkadotnet/akka.net/pull/5380)
+
+Documentation:
+* [Akka: Added a serializer ID troubleshooting table](https://github.com/akkadotnet/akka.net/pull/5418)
+* [Akka.Cluster.Sharding: Added a tutorial section](https://github.com/akkadotnet/akka.net/pull/5421)
+
+Bug fixes:
+* [Akka.Cluster: Changed Akka.Cluster startup sequence](https://github.com/akkadotnet/akka.net/pull/5398)
+* [Akka.DistributedData: Fix LightningDB throws MDB_NOTFOUND when data directory already exist](https://github.com/akkadotnet/akka.net/pull/5424)
+* [Akka.IO: Fix memory leak on UDP connector](https://github.com/akkadotnet/akka.net/pull/5404)
+* [Akka.Persistence.Sql: Fix performance issue with highest sequence number query](https://github.com/akkadotnet/akka.net/pull/5420)
+
+If you want to see the [full set of changes made in Akka.NET v1.4.29, click here](https://github.com/akkadotnet/akka.net/milestone/60).
+
+| COMMITS | LOC+ | LOC- | AUTHOR |
+| --- | --- | --- | --- |
+| 7 | 82 | 51 | Aaron Stannard |
+| 6 | 1381 | 483 | Gregorius Soedharmo |
+| 4 | 618 | 85 | Andreas Dirnberger |
+| 1 | 4 | 4 | Luca V |
+| 1 | 1 | 1 | dependabot[bot] |
+
+#### 1.4.28 November 10 2021 ####
+**Maintenance Release for Akka.NET 1.4**
+Akka.NET v1.4.28 is a minor release that contains some enhancements for Akka.Streams and some bug fixes.
+
+**New Akka.Streams Stages**
+Akka.NET v1.4.28 includes two new Akka.Streams stages:
+
+* [`Source.Never`](https://getakka.net/articles/streams/builtinstages.html#never) - a utility stage that never emits any elements, never completes, and never fails. Designed primarily for unit testing.
+* [`Flow.WireTap`](https://getakka.net/articles/streams/builtinstages.html#wiretap) - the `WireTap` stage attaches a given `Sink` to a `Flow` without affecting any of the upstream or downstream elements. This stage is designed for performance monitoring and instrumentation of Akka.Streams graphs.
+
+In addition to these, here are some other changes introduced Akka.NET v1.4.28:
+
+* [Akka.Streams: `Source` that flattens a `Task` source and keeps the materialized value](https://github.com/akkadotnet/akka.net/pull/5338)
+* [Akka.Streams: made `GraphStageLogic.LogSource` virtual and change default `StageLogic` `LogSource`](https://github.com/akkadotnet/akka.net/pull/5360)
+* [Akka.IO: `UdpListener` Responds IPv6 Bound message with IPv4 Bind message](https://github.com/akkadotnet/akka.net/issues/5344)
+* [Akka.MultiNodeTestRunner: now runs on Linux and as a `dotnet test` package](https://github.com/akkadotnet/Akka.MultiNodeTestRunner/releases/tag/1.0.0) - we will keep you posted on this, as we're still working on getting Rider / VS Code / Visual Studio debugger-attached support to work correctly.
+* [Akka.Persistence.Sql.Common: Cancel `DBCommand` after finish reading events by PersistenceId ](https://github.com/akkadotnet/akka.net/pull/5311) - *massive* performance fix for Akka.Persistence with many log entries on SQL-based journals.
+* [Akka.Actor: `DefaultResizer` does not reisize when `ReceiveAsync` is used](https://github.com/akkadotnet/akka.net/issues/5327)
+
+If you want to see the [full set of changes made in Akka.NET v1.4.28, click here](https://github.com/akkadotnet/akka.net/milestone/59).
+
+| COMMITS | LOC+ | LOC- | AUTHOR |
+| --- | --- | --- | --- |
+| 16 | 2707 | 1911 | Sean Killeen |
+| 8 | 1088 | 28 | Ismael Hamed |
+| 6 | 501 | 261 | Gregorius Soedharmo |
+| 5 | 8 | 8 | dependabot[bot] |
+| 4 | 36 | 86 | Aaron Stannard |
+| 1 | 1 | 0 | Jarl Sveinung Flø Rasmussen |
+
+Special thanks for @SeanKilleen for contributing extensive Markdown linting and automated CI checks for that to our documentation! https://github.com/akkadotnet/akka.net/issues/5312
 
 #### 1.4.27 October 11 2021 ####
 **Maintenance Release for Akka.NET 1.4**
