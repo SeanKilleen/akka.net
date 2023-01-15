@@ -1,7 +1,7 @@
 ﻿//-----------------------------------------------------------------------
 // <copyright file="AsyncWriteProxy.cs" company="Akka.NET Project">
-//     Copyright (C) 2009-2021 Lightbend Inc. <http://www.lightbend.com>
-//     Copyright (C) 2013-2021 .NET Foundation <https://github.com/akkadotnet/akka.net>
+//     Copyright (C) 2009-2022 Lightbend Inc. <http://www.lightbend.com>
+//     Copyright (C) 2013-2022 .NET Foundation <https://github.com/akkadotnet/akka.net>
 // </copyright>
 //-----------------------------------------------------------------------
 
@@ -129,7 +129,7 @@ namespace Akka.Persistence.Journal
             /// </summary>
             public long HighestSequenceNr { get; }
 
-            /// <inheritdoc/>
+            
             public bool Equals(ReplaySuccess other)
             {
                 if (ReferenceEquals(other, null)) return false;
@@ -201,7 +201,7 @@ namespace Akka.Persistence.Journal
             /// </summary>
             public long Max { get; }
 
-            /// <inheritdoc/>
+            
             public bool Equals(ReplayMessages other)
             {
                 if (ReferenceEquals(other, null)) return false;
@@ -241,7 +241,7 @@ namespace Akka.Persistence.Journal
             /// </summary>
             public long ToSequenceNr { get; }
 
-            /// <inheritdoc/>
+            
             public bool Equals(DeleteMessagesTo other)
             {
                 if (ReferenceEquals(other, null)) return false;
@@ -301,22 +301,28 @@ namespace Akka.Persistence.Journal
                 if (!(message is InitTimeout))
                     return base.AroundReceive(receive, message);
             }
-            else if (message is SetStore)
+            else switch (message)
             {
-                _store = ((SetStore) message).Store;
-                Stash.UnstashAll();
-                _isInitialized = true;
+                case SetStore store:
+                    _store = store.Store;
+                    Stash.UnstashAll();
+                    _isInitialized = true;
+                    break;
+                case InitTimeout _:
+                    _isInitTimedOut = true;
+                    Stash.UnstashAll(); // will trigger appropriate failures
+                    break;
+                default:
+                {
+                    if (_isInitTimedOut)
+                    {
+                        return base.AroundReceive(receive, message);
+                    }
+                    else Stash.Stash();
+
+                    break;
+                }
             }
-            else if (message is InitTimeout)
-            {
-                _isInitTimedOut = true;
-                Stash.UnstashAll(); // will trigger appropriate failures
-            }
-            else if (_isInitTimedOut)
-            {
-                return base.AroundReceive(receive, message);
-            }
-            else Stash.Stash();
             return true;
         }
 

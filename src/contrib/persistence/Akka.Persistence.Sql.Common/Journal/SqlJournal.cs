@@ -1,7 +1,7 @@
 ﻿//-----------------------------------------------------------------------
 // <copyright file="SqlJournal.cs" company="Akka.NET Project">
-//     Copyright (C) 2009-2021 Lightbend Inc. <http://www.lightbend.com>
-//     Copyright (C) 2013-2021 .NET Foundation <https://github.com/akkadotnet/akka.net>
+//     Copyright (C) 2009-2022 Lightbend Inc. <http://www.lightbend.com>
+//     Copyright (C) 2013-2022 .NET Foundation <https://github.com/akkadotnet/akka.net>
 // </copyright>
 //-----------------------------------------------------------------------
 
@@ -106,7 +106,7 @@ namespace Akka.Persistence.Sql.Common.Journal
                     return true;
                 case SelectCurrentPersistenceIds request:
                     SelectAllPersistenceIdsAsync(request.Offset)
-                        .PipeTo(request.ReplyTo, success: result => new CurrentPersistenceIds(result.Ids, request.Offset));
+                        .PipeTo(request.ReplyTo, success: result => new CurrentPersistenceIds(result.Ids, result.LastOrdering));
                     return true;
                 case SubscribeTag subscribe:
                     AddTagSubscriber(Sender, subscribe.Tag);

@@ -1,7 +1,7 @@
 ﻿//-----------------------------------------------------------------------
 // <copyright file="TelnetClient.cs" company="Akka.NET Project">
-//     Copyright (C) 2009-2021 Lightbend Inc. <http://www.lightbend.com>
-//     Copyright (C) 2013-2021 .NET Foundation <https://github.com/akkadotnet/akka.net>
+//     Copyright (C) 2009-2022 Lightbend Inc. <http://www.lightbend.com>
+//     Copyright (C) 2013-2022 .NET Foundation <https://github.com/akkadotnet/akka.net>
 // </copyright>
 //-----------------------------------------------------------------------
 
@@ -14,6 +14,7 @@ using Akka.IO;
 
 namespace DocsExamples.Networking.IO
 {
+    // <telnetClient>
     public class TelnetClient : UntypedActor
     {
         public TelnetClient(string host, int port)
@@ -68,4 +69,6 @@ namespace DocsExamples.Networking.IO
             Task.Factory.StartNew(self => Console.In.ReadLineAsync().PipeTo((ICanTell)self), Self);
         }
     }
+
+    // </telnetClient>
 }

@@ -1,7 +1,7 @@
 ﻿//-----------------------------------------------------------------------
 // <copyright file="GSet.cs" company="Akka.NET Project">
-//     Copyright (C) 2009-2021 Lightbend Inc. <http://www.lightbend.com>
-//     Copyright (C) 2013-2021 .NET Foundation <https://github.com/akkadotnet/akka.net>
+//     Copyright (C) 2009-2022 Lightbend Inc. <http://www.lightbend.com>
+//     Copyright (C) 2013-2022 .NET Foundation <https://github.com/akkadotnet/akka.net>
 // </copyright>
 //-----------------------------------------------------------------------
 
@@ -158,13 +158,13 @@ namespace Akka.DistributedData
             return Elements.SetEquals(other.Elements);
         }
 
-        /// <inheritdoc/>
+        
         public IEnumerator<T> GetEnumerator() => Elements.GetEnumerator();
 
-        /// <inheritdoc/>
+        
         public override bool Equals(object obj) => obj is GSet<T> && Equals((GSet<T>)obj);
 
-        /// <inheritdoc/>
+        
         public override int GetHashCode()
         {
             unchecked
@@ -186,7 +186,7 @@ namespace Akka.DistributedData
 
         IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 
-        /// <inheritdoc/>
+        
         public override string ToString()
         {
             var sb = new StringBuilder("GSet(");

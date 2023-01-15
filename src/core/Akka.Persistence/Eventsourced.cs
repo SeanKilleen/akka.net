@@ -1,7 +1,7 @@
 ﻿//-----------------------------------------------------------------------
 // <copyright file="Eventsourced.cs" company="Akka.NET Project">
-//     Copyright (C) 2009-2021 Lightbend Inc. <http://www.lightbend.com>
-//     Copyright (C) 2013-2021 .NET Foundation <https://github.com/akkadotnet/akka.net>
+//     Copyright (C) 2009-2022 Lightbend Inc. <http://www.lightbend.com>
+//     Copyright (C) 2013-2022 .NET Foundation <https://github.com/akkadotnet/akka.net>
 // </copyright>
 //-----------------------------------------------------------------------
 
@@ -628,9 +628,9 @@ namespace Akka.Persistence
                     var sender = Sender;
                     Context.System.DeadLetters.Tell(new DeadLetter(currentMessage, sender, Self), Sender);
                 }
-                else if (strategy is ReplyToStrategy)
+                else if (strategy is ReplyToStrategy toStrategy)
                 {
-                    Sender.Tell(((ReplyToStrategy)strategy).Response);
+                    Sender.Tell(toStrategy.Response);
                 }
                 else if (strategy is ThrowOverflowExceptionStrategy)
                 {

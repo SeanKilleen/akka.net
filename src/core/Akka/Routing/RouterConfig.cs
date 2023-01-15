@@ -1,7 +1,7 @@
 ﻿//-----------------------------------------------------------------------
 // <copyright file="RouterConfig.cs" company="Akka.NET Project">
-//     Copyright (C) 2009-2021 Lightbend Inc. <http://www.lightbend.com>
-//     Copyright (C) 2013-2021 .NET Foundation <https://github.com/akkadotnet/akka.net>
+//     Copyright (C) 2009-2022 Lightbend Inc. <http://www.lightbend.com>
+//     Copyright (C) 2013-2022 .NET Foundation <https://github.com/akkadotnet/akka.net>
 // </copyright>
 //-----------------------------------------------------------------------
 
@@ -124,7 +124,7 @@ namespace Akka.Routing
         /// <returns>The surrogate representation of the current router.</returns>
         public abstract ISurrogate ToSurrogate(ActorSystem system);
 
-        /// <inheritdoc/>
+        
         public bool Equals(RouterConfig other)
         {
             if (ReferenceEquals(null, other)) return false;
@@ -133,7 +133,7 @@ namespace Akka.Routing
             return GetType() == other.GetType() && (GetType() == typeof(NoRouter) || string.Equals(RouterDispatcher, other.RouterDispatcher));
         }
 
-        /// <inheritdoc/>
+        
         public override bool Equals(object obj) => Equals(obj as RouterConfig);
     }
 
@@ -203,7 +203,7 @@ namespace Akka.Routing
             return new RouterActor();
         }
 
-        /// <inheritdoc/>
+       
         public bool Equals(Group other)
         {
             if (ReferenceEquals(null, other)) return false;
@@ -211,7 +211,7 @@ namespace Akka.Routing
             return InternalPaths.SequenceEqual(other.InternalPaths);
         }
 
-        /// <inheritdoc/>
+        
         public override bool Equals(object obj)
         {
             if (ReferenceEquals(null, obj)) return false;
@@ -220,7 +220,7 @@ namespace Akka.Routing
             return Equals((Group)obj);
         }
 
-        /// <inheritdoc/>
+        
         public override int GetHashCode() => InternalPaths?.GetHashCode() ?? 0;
     }
 
@@ -362,7 +362,7 @@ namespace Akka.Routing
             }
         }
 
-        /// <inheritdoc/>
+        
         public bool Equals(Pool other)
         {
             if (ReferenceEquals(null, other)) return false;
@@ -371,7 +371,7 @@ namespace Akka.Routing
                    NrOfInstances == other.NrOfInstances;
         }
 
-        /// <inheritdoc/>
+        
         public override bool Equals(object obj)
         {
             if (ReferenceEquals(null, obj)) return false;
@@ -380,7 +380,7 @@ namespace Akka.Routing
             return Equals((Pool)obj);
         }
 
-        /// <inheritdoc/>
+        
         public override int GetHashCode()
         {
             unchecked
@@ -414,7 +414,7 @@ namespace Akka.Routing
         {
         }
 
-        /// <inheritdoc cref="RouterConfig.CreateRouterActor"/>
+        
         public override ActorBase CreateRouterActor()
         {
             return new RouterActor();

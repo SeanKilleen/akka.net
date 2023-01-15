@@ -1,7 +1,7 @@
 ﻿//-----------------------------------------------------------------------
 // <copyright file="AtomicState.cs" company="Akka.NET Project">
-//     Copyright (C) 2009-2021 Lightbend Inc. <http://www.lightbend.com>
-//     Copyright (C) 2013-2021 .NET Foundation <https://github.com/akkadotnet/akka.net>
+//     Copyright (C) 2009-2022 Lightbend Inc. <http://www.lightbend.com>
+//     Copyright (C) 2013-2022 .NET Foundation <https://github.com/akkadotnet/akka.net>
 // </copyright>
 //-----------------------------------------------------------------------
 
@@ -113,6 +113,38 @@ namespace Akka.Util.Internal
             }
             return result;
         }
+        
+        public async Task<T> CallThrough<T,TState>(TState state, Func<TState,Task<T>> task)
+        {
+            var deadline = DateTime.UtcNow.Add(_callTimeout);
+            ExceptionDispatchInfo capturedException = null;
+            T result = default(T);
+            try
+            {
+                result = await task(state).ConfigureAwait(false);
+            }
+            catch (Exception ex)
+            {
+                capturedException = ExceptionDispatchInfo.Capture(ex);
+            }
+
+            // Need to make sure that timeouts are reported as timeouts
+            if (capturedException != null)
+            {
+                CallFails(capturedException.SourceException);
+                capturedException.Throw();
+            }
+            else if (DateTime.UtcNow.CompareTo(deadline) >= 0)
+            {
+                CallFails(new TimeoutException(
+                    $"Execution did not complete within the time allotted {_callTimeout.TotalMilliseconds} ms"));
+            }
+            else
+            {
+                CallSucceeds();
+            }
+            return result;
+        }
 
         /// <summary>
         /// Shared implementation of call across all states.  Thrown exception or execution of the call beyond the allowed
@@ -154,8 +186,37 @@ namespace Akka.Util.Internal
             {
                 CallSucceeds();
             }
+        }
+        
+        public async Task CallThrough<TState>(TState state, Func<TState, Task> task)
+        {
+            var deadline = DateTime.UtcNow.Add(_callTimeout);
+            ExceptionDispatchInfo capturedException = null;
 
+            try
+            {
+                await task(state).ConfigureAwait(false);
+            }
+            catch (Exception ex)
+            {
+                capturedException = ExceptionDispatchInfo.Capture(ex);
+            }
 
+            // Need to make sure that timeouts are reported as timeouts
+            if (capturedException != null)
+            {
+                CallFails(capturedException?.SourceException);
+                capturedException.Throw();
+            } 
+            else if (DateTime.UtcNow.CompareTo(deadline) >= 0)
+            {
+                CallFails(new TimeoutException(
+                    $"Execution did not complete within the time allotted {_callTimeout.TotalMilliseconds} ms"));
+            }
+            else
+            {
+                CallSucceeds();
+            }
         }
 
         /// <summary>
@@ -166,12 +227,19 @@ namespace Akka.Util.Internal
         /// <returns><see cref="Task"/> containing result of protected call</returns>
         public abstract Task<T> Invoke<T>(Func<Task<T>> body);
 
+        public abstract Task<T> InvokeState<T, TState>(TState state,
+            Func<TState, Task<T>> body);
+
         /// <summary>
         /// Abstract entry point for all states
         /// </summary>
         /// <param name="body">Implementation of the call that needs protected</param>
         /// <returns><see cref="Task"/> containing result of protected call</returns>
         public abstract Task Invoke(Func<Task> body);
+
+        public abstract Task InvokeState<TState>(TState state,
+            Func<TState, Task> body);
+        
 
         /// <summary>
         /// Invoked when call fails

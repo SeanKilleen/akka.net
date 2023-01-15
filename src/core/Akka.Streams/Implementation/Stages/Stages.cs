@@ -1,7 +1,7 @@
 ﻿//-----------------------------------------------------------------------
 // <copyright file="Stages.cs" company="Akka.NET Project">
-//     Copyright (C) 2009-2021 Lightbend Inc. <http://www.lightbend.com>
-//     Copyright (C) 2013-2021 .NET Foundation <https://github.com/akkadotnet/akka.net>
+//     Copyright (C) 2009-2022 Lightbend Inc. <http://www.lightbend.com>
+//     Copyright (C) 2013-2022 .NET Foundation <https://github.com/akkadotnet/akka.net>
 // </copyright>
 //-----------------------------------------------------------------------
 
@@ -67,6 +67,14 @@ namespace Akka.Streams.Implementation.Stages
         /// TBD
         /// </summary>
         public static readonly Attributes Grouped = Attributes.CreateName("grouped");
+        /// <summary>
+        /// TBD
+        /// </summary>
+        public static readonly Attributes GroupedWithin = Attributes.CreateName("groupedWithin");
+        /// <summary>
+        /// TBD
+        /// </summary>
+        public static readonly Attributes GroupedWeightedWithin = Attributes.CreateName("groupedWeightedWithin");
         /// <summary>
         /// TBD
         /// </summary>
@@ -420,6 +428,10 @@ namespace Akka.Streams.Implementation.Stages
         /// TBD
         /// </summary>
         public static readonly Attributes LazySink = Attributes.CreateName("lazySink");
+        /// <summary>
+        /// TBD
+        /// </summary>
+        public static readonly Attributes LazyFlow = Attributes.CreateName("lazyFlow");
         /// <summary>
         /// TBD
         /// </summary>

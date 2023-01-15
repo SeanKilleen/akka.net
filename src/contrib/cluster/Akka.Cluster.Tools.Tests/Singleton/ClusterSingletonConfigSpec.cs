@@ -1,9 +1,11 @@
 ﻿//-----------------------------------------------------------------------
 // <copyright file="ClusterSingletonConfigSpec.cs" company="Akka.NET Project">
-//     Copyright (C) 2009-2021 Lightbend Inc. <http://www.lightbend.com>
-//     Copyright (C) 2013-2021 .NET Foundation <https://github.com/akkadotnet/akka.net>
+//     Copyright (C) 2009-2022 Lightbend Inc. <http://www.lightbend.com>
+//     Copyright (C) 2013-2022 .NET Foundation <https://github.com/akkadotnet/akka.net>
 // </copyright>
 //-----------------------------------------------------------------------
+
+
 
 using System;
 using Akka.Cluster.Tools.Singleton;
@@ -13,6 +15,7 @@ using Xunit;
 
 namespace Akka.Cluster.Tools.Tests.Singleton
 {
+    // <ClusterSingletonConfigSpec>
     public class ClusterSingletonConfigSpec : TestKit.Xunit2.TestKit
     {
         public ClusterSingletonConfigSpec() : base(GetConfig())
@@ -24,7 +27,7 @@ namespace Akka.Cluster.Tools.Tests.Singleton
             return ConfigurationFactory.ParseString(@"akka.actor.provider = cluster
                                                       akka.remote.dot-netty.tcp.port = 0");
         }
-
+        // </ClusterSingletonConfigSpec>
         [Fact]
         public void ClusterSingletonManagerSettings_must_have_default_config()
         {
@@ -54,3 +57,4 @@ namespace Akka.Cluster.Tools.Tests.Singleton
         }
     }
 }
+

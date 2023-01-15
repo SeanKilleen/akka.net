@@ -1,7 +1,7 @@
 ﻿//-----------------------------------------------------------------------
 // <copyright file="TestActor.cs" company="Akka.NET Project">
-//     Copyright (C) 2009-2021 Lightbend Inc. <http://www.lightbend.com>
-//     Copyright (C) 2013-2021 .NET Foundation <https://github.com/akkadotnet/akka.net>
+//     Copyright (C) 2009-2022 Lightbend Inc. <http://www.lightbend.com>
+//     Copyright (C) 2013-2022 .NET Foundation <https://github.com/akkadotnet/akka.net>
 // </copyright>
 //-----------------------------------------------------------------------
 
@@ -64,6 +64,7 @@ namespace Akka.Persistence.TCK.Query
                         Stash.UnstashAll();
                         break;
                     case DeleteMessagesFailure failure:
+                        Log.Error(failure.Cause, "Failed to delete messages to sequence number [{0}].", failure.ToSequenceNr);
                         originalSender.Tell($"{failure.ToSequenceNr}-deleted-failed");
                         Become(OnCommand);
                         Stash.UnstashAll();

@@ -84,7 +84,7 @@ akka {
 }
 ```
 
-## Logging Unhandled messages
+## Logging Unhandled Messages
 
 It is possible to configure akka so that Unhandled messages are logged as Debug log events for debug purposes. This can be achieved using the following configuration setting:
 
@@ -94,7 +94,7 @@ akka {
 }
 ```
 
-## Example configuration
+## Example Configuration
 
 ```hocon
 akka {
@@ -112,3 +112,28 @@ akka {
   }
 }
 ```
+
+## Logging All Receive'd Messages
+
+It is possible to log all Receive'd messages, usually for debug purposes. This can be achieved by implementing the ILogReceive interface:
+
+```c#
+public class MyActor : ReceiveActor, ILogReceive
+{
+    public MyActor()
+    {
+        Receive<string>(s => Sender.Tell("ok"));
+    }
+}
+
+...
+
+// send a MyActor instance a string message
+myActor.Tell("hello");
+```
+
+In your log, expect to see a line such as:
+
+`[DEBUG]... received handled message hello from akka://test/deadLetters`
+
+This logging can be toggled by configuring `akka.actor.debug.receive`.

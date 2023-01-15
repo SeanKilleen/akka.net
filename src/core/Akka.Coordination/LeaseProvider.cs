@@ -1,7 +1,7 @@
 ﻿//-----------------------------------------------------------------------
 // <copyright file="LeaseProvider.cs" company="Akka.NET Project">
-//     Copyright (C) 2009-2021 Lightbend Inc. <http://www.lightbend.com>
-//     Copyright (C) 2013-2021 .NET Foundation <https://github.com/akkadotnet/akka.net>
+//     Copyright (C) 2009-2022 Lightbend Inc. <http://www.lightbend.com>
+//     Copyright (C) 2013-2022 .NET Foundation <https://github.com/akkadotnet/akka.net>
 // </copyright>
 //-----------------------------------------------------------------------
 
@@ -141,12 +141,12 @@ namespace Akka.Coordination
                     {
                         return (Lease)Activator.CreateInstance(leaseType, settings, _system);
                     }
-                    catch
+                    catch(MissingMethodException)
                     {
                         return (Lease)Activator.CreateInstance(leaseType, settings);
                     }
                 }
-                catch (Exception ex)
+                catch (MissingMethodException ex)
                 {
                     Log.Error(
                       ex,
@@ -156,6 +156,17 @@ namespace Akka.Coordination
                       settings.LeaseName,
                       configPath,
                       leaseType);
+
+                    throw;
+                }
+                catch(Exception ex)
+                {
+                    Log.Error(
+                        ex,
+                        "Failed to instantiate lease class [{2}] for leaseName [{0}], configPath [{1}].",
+                        settings.LeaseName,
+                        configPath,
+                        leaseType);
 
                     throw;
                 }

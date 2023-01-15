@@ -1,7 +1,7 @@
 ﻿//-----------------------------------------------------------------------
 // <copyright file="LWWDictionary.cs" company="Akka.NET Project">
-//     Copyright (C) 2009-2021 Lightbend Inc. <http://www.lightbend.com>
-//     Copyright (C) 2013-2021 .NET Foundation <https://github.com/akkadotnet/akka.net>
+//     Copyright (C) 2009-2022 Lightbend Inc. <http://www.lightbend.com>
+//     Copyright (C) 2013-2022 .NET Foundation <https://github.com/akkadotnet/akka.net>
 // </copyright>
 //-----------------------------------------------------------------------
 
@@ -322,15 +322,15 @@ namespace Akka.DistributedData
         public IEnumerator<KeyValuePair<TKey, TValue>> GetEnumerator() =>
             Underlying.Select(x => new KeyValuePair<TKey, TValue>(x.Key, x.Value.Value)).GetEnumerator();
 
-        /// <inheritdoc/>
+        
         public override bool Equals(object obj) =>
             obj is LWWDictionary<TKey, TValue> && Equals((LWWDictionary<TKey, TValue>)obj);
 
-        /// <inheritdoc/>
+        
         public override int GetHashCode() => Underlying.GetHashCode();
         IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 
-        /// <inheritdoc/>
+        
         public override string ToString()
         {
             var sb = new StringBuilder("LWWDictionary(");

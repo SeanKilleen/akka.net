@@ -1,7 +1,7 @@
 ﻿//-----------------------------------------------------------------------
 // <copyright file="QueryApi.cs" company="Akka.NET Project">
-//     Copyright (C) 2009-2021 Lightbend Inc. <http://www.lightbend.com>
-//     Copyright (C) 2013-2021 .NET Foundation <https://github.com/akkadotnet/akka.net>
+//     Copyright (C) 2009-2022 Lightbend Inc. <http://www.lightbend.com>
+//     Copyright (C) 2013-2022 .NET Foundation <https://github.com/akkadotnet/akka.net>
 // </copyright>
 //-----------------------------------------------------------------------
 
@@ -268,17 +268,17 @@ namespace Akka.Persistence.Sql.Common.Journal
             return Equals(HighestSequenceNr, other.HighestSequenceNr);
         }
 
-        /// <inheritdoc/>
+        
         public override bool Equals(object obj)
         {
             if (!(obj is EventReplaySuccess evt)) return false;
             return Equals(evt);
         }
 
-        /// <inheritdoc/>
+        
         public override int GetHashCode() => HighestSequenceNr.GetHashCode();
 
-        /// <inheritdoc/>
+        
         public override string ToString() => $"EventReplaySuccess<highestSequenceNr: {HighestSequenceNr}>";
     }
 
@@ -302,17 +302,17 @@ namespace Akka.Persistence.Sql.Common.Journal
             return Equals(Cause, other.Cause);
         }
 
-        /// <inheritdoc/>
+        
         public override bool Equals(object obj)
         {
             if (!(obj is EventReplayFailure f)) return false;
             return Equals(f);
         }
 
-        /// <inheritdoc/>
+        
         public override int GetHashCode() => Cause.GetHashCode();
 
-        /// <inheritdoc/>
+        
         public override string ToString() => $"EventReplayFailure<cause: {Cause.Message}>";
     }
 

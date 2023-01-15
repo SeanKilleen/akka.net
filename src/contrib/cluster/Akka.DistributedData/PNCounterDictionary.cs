@@ -1,7 +1,7 @@
 ﻿//-----------------------------------------------------------------------
 // <copyright file="PNCounterDictionary.cs" company="Akka.NET Project">
-//     Copyright (C) 2009-2021 Lightbend Inc. <http://www.lightbend.com>
-//     Copyright (C) 2013-2021 .NET Foundation <https://github.com/akkadotnet/akka.net>
+//     Copyright (C) 2009-2022 Lightbend Inc. <http://www.lightbend.com>
+//     Copyright (C) 2013-2022 .NET Foundation <https://github.com/akkadotnet/akka.net>
 // </copyright>
 //-----------------------------------------------------------------------
 
@@ -179,7 +179,7 @@ namespace Akka.DistributedData
         public PNCounterDictionary<TKey> PruningCleanup(UniqueAddress removedNode) =>
             new PNCounterDictionary<TKey>(Underlying.PruningCleanup(removedNode));
 
-        /// <inheritdoc/>
+        
         public bool Equals(PNCounterDictionary<TKey> other)
         {
             if (ReferenceEquals(other, null)) return false;
@@ -188,19 +188,19 @@ namespace Akka.DistributedData
             return Equals(Underlying, other.Underlying);
         }
 
-        /// <inheritdoc/>
+        
         public IEnumerator<KeyValuePair<TKey, BigInteger>> GetEnumerator() =>
             Underlying.Select(x => new KeyValuePair<TKey, BigInteger>(x.Key, x.Value.Value)).GetEnumerator();
         IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 
-        /// <inheritdoc/>
+        
         public override bool Equals(object obj) =>
             obj is PNCounterDictionary<TKey> pairs && Equals(pairs);
 
-        /// <inheritdoc/>
+        
         public override int GetHashCode() => Underlying.GetHashCode();
 
-        /// <inheritdoc/>
+        
         public override string ToString()
         {
             var sb = new StringBuilder("PNCounterDictionary(");

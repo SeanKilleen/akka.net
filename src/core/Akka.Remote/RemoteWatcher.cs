@@ -1,7 +1,7 @@
 ﻿//-----------------------------------------------------------------------
 // <copyright file="RemoteWatcher.cs" company="Akka.NET Project">
-//     Copyright (C) 2009-2021 Lightbend Inc. <http://www.lightbend.com>
-//     Copyright (C) 2013-2021 .NET Foundation <https://github.com/akkadotnet/akka.net>
+//     Copyright (C) 2009-2022 Lightbend Inc. <http://www.lightbend.com>
+//     Copyright (C) 2013-2022 .NET Foundation <https://github.com/akkadotnet/akka.net>
 // </copyright>
 //-----------------------------------------------------------------------
 
@@ -218,7 +218,7 @@ namespace Akka.Remote
         /// </summary>
         public sealed class Stats
         {
-            /// <inheritdoc/>
+            
             public override bool Equals(object obj)
             {
                 var other = obj as Stats;
@@ -226,7 +226,7 @@ namespace Akka.Remote
                 return _watching == other._watching && _watchingNodes == other._watchingNodes;
             }
 
-            /// <inheritdoc/>
+            
             public override int GetHashCode()
             {
                 unchecked
@@ -303,7 +303,7 @@ namespace Akka.Remote
             /// </summary>
             public ImmutableHashSet<Address> WatchingAddresses => _watchingAddresses;
 
-            /// <inheritdoc/>
+            
             public override string ToString()
             {
                 string FormatWatchingRefs()

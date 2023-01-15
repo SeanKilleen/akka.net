@@ -1,7 +1,7 @@
 ﻿//-----------------------------------------------------------------------
 // <copyright file="ISystemMessage.cs" company="Akka.NET Project">
-//     Copyright (C) 2009-2021 Lightbend Inc. <http://www.lightbend.com>
-//     Copyright (C) 2013-2021 .NET Foundation <https://github.com/akkadotnet/akka.net>
+//     Copyright (C) 2009-2022 Lightbend Inc. <http://www.lightbend.com>
+//     Copyright (C) 2013-2022 .NET Foundation <https://github.com/akkadotnet/akka.net>
 // </copyright>
 //-----------------------------------------------------------------------
 
@@ -306,7 +306,6 @@ namespace Akka.Dispatch.SysMsg
     /// </summary>
     public sealed class NoMessage : SystemMessage
     {
-        /// <inheritdoc cref="object"/>
         public override string ToString()
         {
             return "NoMessage";
@@ -349,7 +348,7 @@ namespace Akka.Dispatch.SysMsg
         /// <value><c>true</c> if [address terminated]; otherwise, <c>false</c>.</value>
         public bool AddressTerminated { get; private set; }
 
-        /// <inheritdoc cref="object"/>
+        
         public override string ToString()
         {
             return "<DeathWatchNotification>: " + Actor + ", ExistenceConfirmed=" + ExistenceConfirmed + ", AddressTerminated=" + AddressTerminated;

@@ -1,7 +1,7 @@
 ﻿//-----------------------------------------------------------------------
 // <copyright file="LWWRegister.cs" company="Akka.NET Project">
-//     Copyright (C) 2009-2021 Lightbend Inc. <http://www.lightbend.com>
-//     Copyright (C) 2013-2021 .NET Foundation <https://github.com/akkadotnet/akka.net>
+//     Copyright (C) 2009-2022 Lightbend Inc. <http://www.lightbend.com>
+//     Copyright (C) 2013-2022 .NET Foundation <https://github.com/akkadotnet/akka.net>
 // </copyright>
 //-----------------------------------------------------------------------
 
@@ -188,7 +188,7 @@ namespace Akka.DistributedData
         /// <returns>TBD</returns>
         public IReplicatedData Merge(IReplicatedData other) => Merge((LWWRegister<T>)other);
 
-        /// <inheritdoc/>
+        
         public bool Equals(LWWRegister<T> other)
         {
             if (ReferenceEquals(other, null)) return false;
@@ -197,10 +197,10 @@ namespace Akka.DistributedData
             return Timestamp == other.Timestamp && UpdatedBy == other.UpdatedBy && Equals(Value, other.Value);
         }
 
-        /// <inheritdoc/>
+        
         public override bool Equals(object obj) => obj is LWWRegister<T> && Equals((LWWRegister<T>)obj);
 
-        /// <inheritdoc/>
+        
         public override int GetHashCode()
         {
             unchecked
@@ -212,7 +212,7 @@ namespace Akka.DistributedData
             }
         }
 
-        /// <inheritdoc/>
+        
         public override string ToString() => $"LWWRegister(value={Value}, timestamp={Timestamp}, updatedBy={UpdatedBy})";
 
         public Type RegisterType { get; } = typeof(T);

@@ -1,7 +1,7 @@
 ﻿//-----------------------------------------------------------------------
 // <copyright file="Flow.cs" company="Akka.NET Project">
-//     Copyright (C) 2009-2021 Lightbend Inc. <http://www.lightbend.com>
-//     Copyright (C) 2013-2021 .NET Foundation <https://github.com/akkadotnet/akka.net>
+//     Copyright (C) 2009-2022 Lightbend Inc. <http://www.lightbend.com>
+//     Copyright (C) 2013-2022 .NET Foundation <https://github.com/akkadotnet/akka.net>
 // </copyright>
 //-----------------------------------------------------------------------
 
@@ -9,11 +9,13 @@ using System;
 using System.Collections.Immutable;
 using System.Linq;
 using System.Runtime.ExceptionServices;
+using System.Threading.Tasks;
 using Akka.Actor;
 using Akka.Streams.Dsl.Internal;
 using Akka.Streams.Implementation;
 using Akka.Streams.Implementation.Fusing;
 using Akka.Streams.Implementation.Stages;
+using Akka.Util;
 using Reactive.Streams;
 
 namespace Akka.Streams.Dsl
@@ -507,6 +509,25 @@ namespace Akka.Streams.Dsl
         /// <returns>TBD</returns>
         public static Flow<TIn, TOut, TMat> FromSinkAndSource<TIn, TOut, TMat1, TMat2, TMat>(IGraph<SinkShape<TIn>, TMat1> sink, IGraph<SourceShape<TOut>, TMat2> source, Func<TMat1, TMat2, TMat> combine) 
             => FromGraph(GraphDsl.Create(sink, source, combine, (builder, @in, @out) => new FlowShape<TIn, TOut>(@in.Inlet, @out.Outlet)));
+
+        /// <summary>
+        /// Creates a real <see cref="Flow"/> upon receiving the first element. Internal <see cref="Flow"/> will not be created
+        /// if there are no elements, because of completion, cancellation, or error.
+        /// <para>
+        /// The materialized value of the <see cref="Flow"/> is a <see cref="Task{TMat}"/> that is completed with `TMat` when the internal
+        /// flow gets materialized or with `default` when there where no elements. If the flow materialization (including
+        /// the call of the `flowFactory`) fails then the future is completed with a failure.
+        /// </para>
+        /// <para>Emits when the internal flow is successfully created and it emits</para>
+        /// <para>Cancels when downstream cancels</para>
+        /// </summary>
+        /// <typeparam name="TIn">TBD</typeparam>
+        /// <typeparam name="TOut">TBD</typeparam>
+        /// <typeparam name="TMat">TBD</typeparam>
+        /// <param name="flowFactory">TBD</param>
+        /// <returns>TBD</returns>
+        public static Flow<TIn, TOut, Task<Option<TMat>>> LazyInitAsync<TIn, TOut, TMat>(Func<Task<Flow<TIn, TOut, TMat>>> flowFactory) =>
+            FromGraph(new LazyFlow<TIn, TOut, TMat>(_ => flowFactory()));
     }
 
     /// <summary>

@@ -1,7 +1,7 @@
 ﻿//-----------------------------------------------------------------------
 // <copyright file="ActorCell.Children.cs" company="Akka.NET Project">
-//     Copyright (C) 2009-2021 Lightbend Inc. <http://www.lightbend.com>
-//     Copyright (C) 2013-2021 .NET Foundation <https://github.com/akkadotnet/akka.net>
+//     Copyright (C) 2009-2022 Lightbend Inc. <http://www.lightbend.com>
+//     Copyright (C) 2013-2022 .NET Foundation <https://github.com/akkadotnet/akka.net>
 // </copyright>
 //-----------------------------------------------------------------------
 
@@ -349,10 +349,10 @@ namespace Akka.Actor
         // In Akka JVM there is a getAllChildStats here. Use ChildrenRefs.Stats instead
 
         /// <summary>
-        /// Obsolete. Use <see cref="TryGetSingleChild(string, out IInternalActorRef)"/> instead.
+        /// Get a single child matching the name supplied
         /// </summary>
-        /// <param name="name">N/A</param>
-        /// <returns>N/A</returns>
+        /// <param name="name">the child's name</param>
+        /// <returns>IInternalActorRef</returns>
         public IInternalActorRef GetSingleChild(string name)
         {
             if (name.IndexOf('#') < 0)

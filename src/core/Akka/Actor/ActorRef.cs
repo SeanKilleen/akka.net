@@ -1,7 +1,7 @@
 ﻿//-----------------------------------------------------------------------
 // <copyright file="ActorRef.cs" company="Akka.NET Project">
-//     Copyright (C) 2009-2021 Lightbend Inc. <http://www.lightbend.com>
-//     Copyright (C) 2013-2021 .NET Foundation <https://github.com/akkadotnet/akka.net>
+//     Copyright (C) 2009-2022 Lightbend Inc. <http://www.lightbend.com>
+//     Copyright (C) 2013-2022 .NET Foundation <https://github.com/akkadotnet/akka.net>
 // </copyright>
 //-----------------------------------------------------------------------
 
@@ -69,7 +69,7 @@ namespace Akka.Actor
     ///
     /// ActorRef implementation used for one-off tasks.
     /// </summary>
-    public sealed class FutureActorRef<T> : MinimalActorRef
+    public class FutureActorRef<T> : MinimalActorRef
     {
         private readonly TaskCompletionSource<T> _result;
         private readonly ActorPath _path;
@@ -122,9 +122,12 @@ namespace Akka.Actor
                     handled = _result.TrySetException(f.Cause
                         ?? new TaskCanceledException("Task cancelled by actor via Failure message."));
                     break;
+#pragma warning disable CS0618
+                // for backwards compatibility
                 case Failure f:
                     handled = _result.TrySetException(f.Exception
-                        ?? new TaskCanceledException("Task cancelled by actor via Failure message."));
+                                                      ?? new TaskCanceledException("Task cancelled by actor via Failure message."));
+#pragma warning restore CS0618
                     break;
                 default:
                     _ = _result.TrySetException(new ArgumentException(
@@ -135,6 +138,10 @@ namespace Akka.Actor
             //ignore canceled ask and put unhandled answers into deadletter
             if (!handled && !_result.Task.IsCanceled)
                 _provider.DeadLetters.Tell(message ?? default(T), this);            
+        }
+        
+        public virtual void DeliverAsk(object message, ICanTell destination){
+            destination.Tell(message, this);
         }
     }
 
@@ -284,14 +291,14 @@ namespace Akka.Actor
         /// <param name="sender">TBD</param>
         protected abstract void TellInternal(object message, IActorRef sender);
 
-        /// <inheritdoc/>
+        
         public override string ToString()
         {
             if (Path.Uid == ActorCell.UndefinedUid) return $"[{Path}]";
             return $"[{Path}#{Path.Uid}]";
         }
 
-        /// <inheritdoc/>
+        
         public override bool Equals(object obj)
         {
             if (obj is IActorRef other)
@@ -300,7 +307,6 @@ namespace Akka.Actor
             return false;
         }
 
-        /// <inheritdoc/>
         public override int GetHashCode()
         {
             unchecked
@@ -312,7 +318,6 @@ namespace Akka.Actor
             }
         }
 
-        /// <inheritdoc/>
         /// <exception cref="ArgumentException">
         /// This exception is thrown if the given <paramref name="obj"/> isn't an <see cref="IActorRef"/>.
         /// </exception>
@@ -344,7 +349,7 @@ namespace Akka.Actor
                 && Path.Equals(other.Path);
         }
 
-        /// <inheritdoc/>
+        
         public int CompareTo(IActorRef other)
         {
             if (other is null) return 1;
@@ -901,7 +906,7 @@ override def getChild(name: Iterator[String]): InternalActorRef = {
                 _enumerator = enumerator;
             }
 
-            /// <inheritdoc/>
+            
             public IEnumerator<T> GetEnumerator()
             {
                 return _enumerator;

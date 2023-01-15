@@ -1,7 +1,7 @@
 ﻿//-----------------------------------------------------------------------
 // <copyright file="ActorPath.cs" company="Akka.NET Project">
-//     Copyright (C) 2009-2021 Lightbend Inc. <http://www.lightbend.com>
-//     Copyright (C) 2013-2021 .NET Foundation <https://github.com/akkadotnet/akka.net>
+//     Copyright (C) 2009-2022 Lightbend Inc. <http://www.lightbend.com>
+//     Copyright (C) 2013-2022 .NET Foundation <https://github.com/akkadotnet/akka.net>
 // </copyright>
 //-----------------------------------------------------------------------
 
@@ -64,21 +64,18 @@ namespace Akka.Actor
 
             #region Equality
 
-            /// <inheritdoc/>
             public bool Equals(Surrogate other)
             {
                 if (other is null) return false;
                 return ReferenceEquals(this, other) || StringComparer.Ordinal.Equals(Path, other.Path);
             }
 
-            /// <inheritdoc/>
             public bool Equals(ActorPath other)
             {
                 if (other is null) return false;
                 return StringComparer.Ordinal.Equals(Path, other.ToSerializationFormat());
             }
 
-            /// <inheritdoc/>
             public override bool Equals(object obj)
             {
                 if (obj is null) return false;
@@ -87,7 +84,6 @@ namespace Akka.Actor
                 return Equals(obj as Surrogate);
             }
 
-            /// <inheritdoc/>
             public override int GetHashCode()
             {
                 return Path.GetHashCode();
@@ -262,7 +258,6 @@ namespace Akka.Actor
         [JsonIgnore]
         public ActorPath Root => ParentOf(0);
 
-        /// <inheritdoc/>
         public bool Equals(ActorPath other)
         {
             if (other is null || _depth != other._depth)
@@ -290,7 +285,6 @@ namespace Akka.Actor
             }
         }
 
-        /// <inheritdoc/>
         public int CompareTo(ActorPath other)
         {
             if (_depth == 0)
@@ -563,8 +557,15 @@ namespace Akka.Actor
         /// </summary>
         /// <param name="prefix">the address or empty</param>
         /// <returns> System.String. </returns>
-        private string Join(ReadOnlySpan<char> prefix)
+        private string Join(ReadOnlySpan<char> prefix, long? uid = null)
         {
+            void AppendUidSpan(ref Span<char> writeable, int startPos, int sizeHint)
+            {
+                if (uid == null) return;
+                writeable[startPos] = '#';
+                SpanHacks.TryFormat(uid.Value, startPos+1, ref writeable, sizeHint);
+            }
+
             if (_depth == 0)
             {
                 Span<char> buffer = prefix.Length < 1024 ? stackalloc char[prefix.Length + 1] : new char[prefix.Length + 1];
@@ -582,17 +583,28 @@ namespace Akka.Actor
                     totalLength += p._name.Length + 1;
                     p = p._parent;
                 }
+                
+                // UID calculation
+                var uidSizeHint = 0;
+                if (uid != null)
+                {
+                    // 1 extra character for the '#'
+                    uidSizeHint = SpanHacks.Int64SizeInCharacters(uid.Value) + 1;
+                    totalLength += uidSizeHint; 
+                }
 
                 // Concatenate segments (in reverse order) into buffer with '/' prefixes                
                 Span<char> buffer = totalLength < 1024 ? stackalloc char[totalLength] : new char[totalLength];
                 prefix.CopyTo(buffer);
 
-                var offset = buffer.Length;
-                ReadOnlySpan<char> name;
+                var offset = buffer.Length - uidSizeHint;
+                // append UID span first
+                AppendUidSpan(ref buffer, offset, uidSizeHint-1); // -1 for the '#'
+                
                 p = this;
                 while (p._depth > 0)
                 {
-                    name = p._name.AsSpan();
+                    var name = p._name.AsSpan();
                     offset -= name.Length + 1;
                     buffer[offset] = '/';
                     name.CopyTo(buffer.Slice(offset + 1, name.Length));
@@ -613,7 +625,6 @@ namespace Akka.Actor
             return Join(ReadOnlySpan<char>.Empty);
         }
 
-        /// <inheritdoc/>
         public override string ToString()
         {
             return Join(_address.ToString().AsSpan());
@@ -650,7 +661,6 @@ namespace Akka.Actor
             }
         }
 
-        /// <inheritdoc/>
         public override bool Equals(object obj)
         {
             return Equals(obj as ActorPath);
@@ -684,7 +694,12 @@ namespace Akka.Actor
         /// <returns> System.String. </returns>
         public string ToStringWithAddress()
         {
-            return ToStringWithAddress(_address);
+            return ToStringWithAddress(_address, false);
+        }
+
+        private string ToStringWithAddress(bool includeUid)
+        {
+            return ToStringWithAddress(_address, includeUid);
         }
 
         /// <summary>
@@ -693,7 +708,7 @@ namespace Akka.Actor
         /// <returns>TBD</returns>
         public string ToSerializationFormat()
         {
-            return AppendUidFragment(ToStringWithAddress());
+            return ToStringWithAddress(true);
         }
 
         /// <summary>
@@ -708,8 +723,7 @@ namespace Akka.Actor
                 // we never change address for IgnoreActorRef
                 return ToString();
             }
-            var withAddress = ToStringWithAddress(address);
-            var result = AppendUidFragment(withAddress);
+            var result = ToStringWithAddress(address, true);
             return result;
         }
 
@@ -727,15 +741,25 @@ namespace Akka.Actor
         /// <returns> System.String. </returns>
         public string ToStringWithAddress(Address address)
         {
+            return ToStringWithAddress(address, false);
+        }
+
+        private string ToStringWithAddress(Address address, bool includeUid)
+        {
             if (IgnoreActorRef.IsIgnoreRefPath(this))
             {
                 // we never change address for IgnoreActorRef
                 return ToString();
             }
+            
+            long? uid = null;
+            if (includeUid && _uid != ActorCell.UndefinedUid)
+                uid = _uid;
+            
             if (_address.Host != null && _address.Port.HasValue)
-                return Join(_address.ToString().AsSpan());
+                return Join(_address.ToString().AsSpan(), uid);
 
-            return Join(address.ToString().AsSpan());
+            return Join(address.ToString().AsSpan(), uid);
         }
 
         /// <summary>

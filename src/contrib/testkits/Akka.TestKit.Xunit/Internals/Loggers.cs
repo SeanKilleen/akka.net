@@ -1,7 +1,7 @@
 ﻿//-----------------------------------------------------------------------
 // <copyright file="Loggers.cs" company="Akka.NET Project">
-//     Copyright (C) 2009-2021 Lightbend Inc. <http://www.lightbend.com>
-//     Copyright (C) 2013-2021 .NET Foundation <https://github.com/akkadotnet/akka.net>
+//     Copyright (C) 2009-2022 Lightbend Inc. <http://www.lightbend.com>
+//     Copyright (C) 2013-2022 .NET Foundation <https://github.com/akkadotnet/akka.net>
 // </copyright>
 //-----------------------------------------------------------------------
 
@@ -13,7 +13,7 @@ using Xunit.Abstractions;
 namespace Akka.TestKit.Xunit.Internals
 {
     /// <summary>
-    /// This class represents an actor that logs output from tests using an <see cref="ITestOutputHelper"/> provider.
+    /// This class represents an actor that logs output from tests using an ITestOutputHelper provider.
     /// </summary>
     public class TestOutputLogger : ReceiveActor
     {

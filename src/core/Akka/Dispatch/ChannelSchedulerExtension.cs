@@ -1,4 +1,11 @@
-﻿using System;
+﻿//-----------------------------------------------------------------------
+// <copyright file="ChannelSchedulerExtension.cs" company="Akka.NET Project">
+//     Copyright (C) 2009-2022 Lightbend Inc. <http://www.lightbend.com>
+//     Copyright (C) 2013-2022 .NET Foundation <https://github.com/akkadotnet/akka.net>
+// </copyright>
+//-----------------------------------------------------------------------
+
+using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Channels;
@@ -349,7 +356,7 @@ namespace Akka.Dispatch
         /// and to help execute queued works internaly. 
         /// It supports task-inlining only for task equal or above the own priority
         /// </summary>
-        sealed class PriorityTaskScheduler : TaskScheduler, IDisposable
+        internal sealed class PriorityTaskScheduler : TaskScheduler, IDisposable
         {
             readonly Channel<Task> _channel;
 

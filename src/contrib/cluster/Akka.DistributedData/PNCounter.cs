@@ -1,7 +1,7 @@
 ﻿//-----------------------------------------------------------------------
 // <copyright file="PNCounter.cs" company="Akka.NET Project">
-//     Copyright (C) 2009-2021 Lightbend Inc. <http://www.lightbend.com>
-//     Copyright (C) 2013-2021 .NET Foundation <https://github.com/akkadotnet/akka.net>
+//     Copyright (C) 2009-2022 Lightbend Inc. <http://www.lightbend.com>
+//     Copyright (C) 2013-2022 .NET Foundation <https://github.com/akkadotnet/akka.net>
 // </copyright>
 //-----------------------------------------------------------------------
 
@@ -100,7 +100,7 @@ namespace Akka.DistributedData
         public PNCounter PruningCleanup(Cluster.UniqueAddress removedNode) =>
             new PNCounter(Increments.PruningCleanup(removedNode), Decrements.PruningCleanup(removedNode));
 
-        /// <inheritdoc/>
+        
         public bool Equals(PNCounter other)
         {
             if (ReferenceEquals(other, null)) return false;
@@ -109,13 +109,13 @@ namespace Akka.DistributedData
             return other.Increments.Equals(Increments) && other.Decrements.Equals(Decrements);
         }
 
-        /// <inheritdoc/>
+        
         public override string ToString() => $"PNCounter({Value})";
 
-        /// <inheritdoc/>
+        
         public override bool Equals(object obj) => obj is PNCounter && Equals((PNCounter)obj);
 
-        /// <inheritdoc/>
+        
         public override int GetHashCode() => Increments.GetHashCode() ^ Decrements.GetHashCode();
 
         public IReplicatedData Merge(IReplicatedData other) => Merge((PNCounter)other);

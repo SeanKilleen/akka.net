@@ -1,7 +1,7 @@
 ﻿//-----------------------------------------------------------------------
 // <copyright file="Scope.cs" company="Akka.NET Project">
-//     Copyright (C) 2009-2021 Lightbend Inc. <http://www.lightbend.com>
-//     Copyright (C) 2013-2021 .NET Foundation <https://github.com/akkadotnet/akka.net>
+//     Copyright (C) 2009-2022 Lightbend Inc. <http://www.lightbend.com>
+//     Copyright (C) 2013-2022 .NET Foundation <https://github.com/akkadotnet/akka.net>
 // </copyright>
 //-----------------------------------------------------------------------
 
@@ -37,7 +37,6 @@ namespace Akka.Actor
         /// <returns>The newly created <see cref="Akka.Actor.Scope"/></returns>
         public abstract Scope Copy();
 
-        /// <inheritdoc/>
         public virtual bool Equals(Scope other)
         {
             if (other == null) return false;

@@ -1,7 +1,7 @@
 ﻿//-----------------------------------------------------------------------
 // <copyright file="NodeMetrics.cs" company="Akka.NET Project">
-//     Copyright (C) 2009-2021 Lightbend Inc. <http://www.lightbend.com>
-//     Copyright (C) 2013-2021 .NET Foundation <https://github.com/akkadotnet/akka.net>
+//     Copyright (C) 2009-2022 Lightbend Inc. <http://www.lightbend.com>
+//     Copyright (C) 2013-2022 .NET Foundation <https://github.com/akkadotnet/akka.net>
 // </copyright>
 //-----------------------------------------------------------------------
 
@@ -94,7 +94,7 @@ namespace Akka.Cluster.Metrics.Serialization
          */
 
 
-        /// <inheritdoc />
+        
         public bool Equals(NodeMetrics other)
         {
             if (ReferenceEquals(null, other)) return false;
@@ -102,7 +102,7 @@ namespace Akka.Cluster.Metrics.Serialization
             return Equals(Address, other.Address);
         }
 
-        /// <inheritdoc />
+        
         public override int GetHashCode()
         {
             return (Address != null ? Address.GetHashCode() : 0);
